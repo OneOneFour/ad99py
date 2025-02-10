@@ -3,9 +3,7 @@ import numpy as np
 
 
 ## CONSTANTS
-g = 9.81
-Rd = 287.04
-c_p = 7 * Rd / 2
+
 
 ## Class implementation
 
