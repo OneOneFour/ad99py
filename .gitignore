@@ -2,3 +2,4 @@ data/
 figures/
 __pycache__/
 *.npy
+slurm_worker_logs/
