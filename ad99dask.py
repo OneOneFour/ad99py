@@ -5,7 +5,7 @@ from ad99 import AlexanderDunkerton1999
 
 
 def dask_take_along_axis(data, idx):
-    return np.take_along_axis(data[0], idx[0], axis=-1).squeeze(axis=-1)
+    return np.take_along_axis(data, idx, axis=-1).squeeze(axis=-1)
 
 
 class AlexanderDunkerton1999Vectorized(AlexanderDunkerton1999):
@@ -196,18 +196,9 @@ class AlexanderDunkerton1999Dask(AlexanderDunkerton1999):
 
     def get_source_variables(self, z, u, N, rho, lat=None):
         source_levels = self.get_source_level(z, lat)
-        rho_0 = da.blockwise(
-            dask_take_along_axis,
-            "ij",
-            rho,
-            "ijk",
-            source_levels,
-            "ijk",
-            dtype=rho.dtype,
-        )
-        u_0 = da.blockwise(
-            dask_take_along_axis, "ij", u, "ijk", source_levels, "ijk", dtype=u.dtype
-        )
+        rho_0 = da.map_blocks(dask_take_along_axis,rho,source_levels,dtype=rho.dtype,drop_axis=-1)
+        u_0 = da.map_blocks(dask_take_along_axis, u, source_levels, dtype=u.dtype, drop_axis=-1)
+    
         return rho_0, u_0
 
     def get_vertical_scales(self, z, rho):
