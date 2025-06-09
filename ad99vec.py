@@ -67,7 +67,7 @@ class AlexanderDunkerton1999Vectorized(AlexanderDunkerton1999):
         c: Optional[np.ndarray] = None,
     ):
         if c is None:
-            c = self.c0
+            c = self.c0.astype(u.dtype)
         else:
             c = np.asarray(c)
 
