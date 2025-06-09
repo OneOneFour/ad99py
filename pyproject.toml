@@ -1,0 +1,41 @@
+[build-system]
+requires = ["setuptools >= 77.0.3"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ad99py"
+version = "0.0.1"
+authors = [
+  { name="Robert King", email="robcking@stanford.edu" },
+]
+description = "Implementation in python of the Alexander & Dunkerton 1999 Gravity Wave parameterization for offline testing."
+readme = "README.md"
+requires-python = ">=3.10"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
+license = "MIT"
+license-files = ["LICEN[CS]E*"]
+dependencies = [ # Package requirements
+    "numpy",
+    "scipy",
+    "xarray",
+]
+
+
+[project.optional-dependencies]
+dask = ["dask"]
+harmonics=["windspharm","numpy<1.25"]
+
+[tool.setuptools.package-data]
+"ad99py.examples" = [
+  "notebooks/*",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[project.urls]
+Homepage = "https://github.com/OneOneFour/ad99py"
+Issues = "https://github.com/OneOneFour/ad99py/issues"

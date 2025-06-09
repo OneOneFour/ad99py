@@ -1,0 +1,22 @@
+Metadata-Version: 2.4
+Name: ad99py
+Version: 0.0.1
+Summary: Implementation in python of the Alexander & Dunkerton 1999 Gravity Wave parameterization for offline testing.
+Author-email: Robert King <robcking@stanford.edu>
+License-Expression: MIT
+Project-URL: Homepage, https://github.com/OneOneFour/ad99py
+Project-URL: Issues, https://github.com/OneOneFour/ad99py/issues
+Classifier: Programming Language :: Python :: 3
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+Requires-Dist: numpy
+Requires-Dist: scipy
+Requires-Dist: xarray
+Provides-Extra: dask
+Requires-Dist: dask; extra == "dask"
+Provides-Extra: harmonics
+Requires-Dist: windspharm; extra == "harmonics"
+Requires-Dist: numpy<1.25; extra == "harmonics"
+
+# AD99py 

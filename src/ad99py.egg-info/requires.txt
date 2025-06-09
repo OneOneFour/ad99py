@@ -1,0 +1,10 @@
+numpy
+scipy
+xarray
+
+[dask]
+dask
+
+[harmonics]
+windspharm
+numpy<1.25
