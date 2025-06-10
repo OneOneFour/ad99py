@@ -1,6 +1,6 @@
 from typing import Optional
 import numpy as np
-from ad99 import AlexanderDunkerton1999
+from .ad99 import AlexanderDunkerton1999
 
 
 class AlexanderDunkerton1999Vectorized(AlexanderDunkerton1999):

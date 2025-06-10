@@ -5,11 +5,11 @@ DEFAULT_MASK_PATH = 'data/loon_masks.nc'
 def load_mask(path:Optional[str]=None,recentering:bool=True)->xr.Dataset:
     if path is None:
         path = DEFAULT_MASK_PATH
-    ds_mask = xr.open_dataset(DEFAULT_MASK_PATH)
+    ds_mask = xr.open_dataset(path)
     if recentering:
         # map longitudes to be in range 0-360
-        ds_mask_trop['lon']= (ds_mask_trop.lon + 360)%360
-    return ds_mask_trop
+        ds_mask['lon']= (ds_mask.lon + 360)%360
+    return ds_mask
 
 
 def mask_dataset(ds:xr.Dataset,mask:Optional[xr.Dataset]=None):

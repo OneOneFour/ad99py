@@ -47,3 +47,6 @@ def build_dictionary(untv,uptv,vntv,vptv):
         'v_flux_net':net_v,
         'total_flux':tot[tot>0]
     }
+
+def loon_data(basins='*',path=None):
+    return build_dictionary(*get_fluxes(basins,path))

@@ -1,6 +1,6 @@
 
 from scipy.integrate import cumulative_trapezoid
-from constants import GRAV
+from .constants import GRAV
 import numpy as np 
 
 try:

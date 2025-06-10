@@ -1,9 +1,7 @@
 import xarray as xr
-from typing import TYPE_CHECKING
-
 import numpy as np
 import dask.array as da
-from constants import GRAV,R_DRY,C_P
+from .constants import GRAV,R_DRY,C_P
 
 def dTdz(T:np.ndarray|da.Array,z:np.ndarray | da.Array):
     if isinstance(T,da.Array) or isinstance(z,da.Array):
@@ -12,6 +10,8 @@ def dTdz(T:np.ndarray|da.Array,z:np.ndarray | da.Array):
     
 def Ns2(T:np.ndarray,z:np.ndarray,bflim=5e-3):
     Ns2unfilter = (GRAV/T)*(dTdz(T,z) + GRAV/C_P)
+    if isinstance(T,da.Array) or isinstance(z,da.Array):
+        return da.where(Ns2unfilter<bflim**2,bflim**2,Ns2unfilter)
     return np.where(Ns2unfilter<bflim**2,bflim**2,Ns2unfilter)
 
 def rho(T:np.ndarray|da.Array,p:np.ndarray|da.Array,hectopascal:bool=True):

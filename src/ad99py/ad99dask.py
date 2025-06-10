@@ -1,10 +1,8 @@
 from typing import Optional
 import numpy as np
-from ad99 import AlexanderDunkerton1999
-try:
-    import dask.array as da
-except ImportError as e:
-    raise ImportError("Dask support not enabled, please install with pip install ad99py[dask]")
+from .ad99 import AlexanderDunkerton1999
+import dask.array as da
+
 
 
 def dask_take_along_axis(data, idx):

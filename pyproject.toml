@@ -21,11 +21,11 @@ dependencies = [ # Package requirements
     "numpy",
     "scipy",
     "xarray",
+    "dask"
 ]
 
 
 [project.optional-dependencies]
-dask = ["dask"]
 harmonics=["windspharm","numpy<1.25"]
 
 [tool.setuptools.package-data]
