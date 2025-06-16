@@ -46,10 +46,7 @@ class AlexanderDunkerton1999Dask(AlexanderDunkerton1999):
             else:
                 c0 = da.where(da.abs(lat[...,None]) > self.use_intrinsic_c, 0.0, u)
         return (
-            da.sign(c - u)
-            * self.Bm
-            * da.exp(-da.log(2) * ((c - c0) / self.cw) ** 2)
-            * (~da.isclose(c - u, 0.0))
+            da.sign(c - u) * self.source(c,c0) # Note source required to be dask aware
         ).astype(u.dtype)
 
     def get_source_variables(self, z, u, N, rho, lat=None):

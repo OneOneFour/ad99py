@@ -1,5 +1,5 @@
 from scipy.integrate import cumulative_trapezoid
-from typing import Literal, NamedTuple, Optional, Union
+from typing import Literal, NamedTuple, Optional, Union,Callable
 from numbers import Number
 import numpy as np
 from numpy.typing import ArrayLike, NDArray
@@ -29,9 +29,8 @@ class Level(NamedTuple):
 class AlexanderDunkerton1999:
     def __init__(
         self,
+        source:Callable[[Number,Number],Number]=None,
         source_level_height: Number = 9e3,
-        Bm: Number = 0.4,
-        cw: Number = 35,
         Fs0: Number = 0.004,
         damp_level_height: Optional[Number] = None,
         cmax: Number = 99.6,
@@ -41,6 +40,8 @@ class AlexanderDunkerton1999:
         use_intrinsic_c: Union[Number, Literal["never", "always"]] = "always",
         no_alpha: bool = False,
         exclude_unbroken: bool = False,
+        cw: float = 35,
+        Bm:float = 0.4,
     ):
         """
         Initialize an AlexanderDunkerton1999 Non-orographic drag parameterization instance.
@@ -48,7 +49,6 @@ class AlexanderDunkerton1999:
 
         Parameterization Parameters:
         Bt: Total Equatorial GW Momentum Flux (m^2/s^2)
-        cw: Half Width at half maximum of GW source spectrum (m/s)
 
         Grid Parameters:
         pfull - Full pressure levels (hPa) [N]
@@ -57,11 +57,14 @@ class AlexanderDunkerton1999:
 
         TODO:
         """
-        self.cmax = cmax
         self.dc = dc
-        self.Bm = Bm
-        self.cw = cw
         self.cmax = cmax
+        if source is None:
+            from warnings import warn
+            from .sources import make_source_spectrum,gaussian_source
+            warn(f"`source` is not set, using default Gaussian source spectrum, with `cw={cw}` and `Bm={Bm}`.")
+            source = make_source_spectrum(gaussian_source, cw,Bm)
+        self.source = source
         self.dc = dc
         self.Fs0 = Fs0
         self.use_intrinsic_c = use_intrinsic_c
@@ -81,8 +84,7 @@ class AlexanderDunkerton1999:
 
     def __repr__(self) -> str:
         return (
-            f"AlexanderDunkerton1999(Bm={self.Bm},cw={self.cw}"
-            f",Fs0={self.Fs0},height={self.source_level_height},"
+            f"AlexanderDunkerton1999(Fs0={self.Fs0},height={self.source_level_height},"
             f" λ={self.base_wavelength}, damping_level={self.damp_level_height})"
         )
 
@@ -218,6 +220,8 @@ class AlexanderDunkerton1999:
         $c_max$ determines the maximum phase speed of the spectrum.
         $delta_c$ determines the grid spacing of the spectrum.
         """
+        
+
         if lat is None:
             lat = float("nan")
         match self.use_intrinsic_c:
@@ -227,12 +231,13 @@ class AlexanderDunkerton1999:
                 c0 = u
             case _:
                 c0 = 0.0 if np.abs(lat) >= self.use_intrinsic_c else u
-        return (
-            np.sign(c - u)
-            * self.Bm
-            * np.exp(-np.log(2) * ((c - c0) / self.cw) ** 2)
-            * (~np.isclose(c - u, 0.0))
-        )
+        return np.sign(c-u)*self.source(c,c0)
+        # return (
+        #     np.sign(c - u)
+        #     * self.Bm
+        #     * np.exp(-np.log(2) * ((c - c0) / self.cw) ** 2)
+        #     * (~np.isclose(c - u, 0.0))
+        # )
 
     def intermittency(
         self,
