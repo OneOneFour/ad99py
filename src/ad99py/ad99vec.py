@@ -37,10 +37,7 @@ class AlexanderDunkerton1999Vectorized(AlexanderDunkerton1999):
             else:
                 c0 = np.where(np.abs(lat) > self.use_intrinsic_c, 0.0, u)
         return (
-            np.sign(c - u)
-            * self.Bm
-            * np.exp(-np.log(2) * ((c - c0) / self.cw) ** 2)
-            * (~np.isclose(c - u, 0.0))
+            np.sign(c - u)*self.source(c,c0) # Note source required to be vectorized
         ).astype(u.dtype)
 
     def get_source_variables(self, z, u, N, rho, lat=None):
