@@ -7,6 +7,10 @@ def make_source_spectrum(source,cw,Bm):
         return source(c,c0,cw,Bm)
     return source_spectrum
 
+def uniform_source(c,c0,cw,Bm):
+    # This is actually fine as intermittency will normalize this
+    return Bm
+
 def gaussian_source(c,c0,cw,Bm):
     return Bm * np.exp(-np.log(2) * ((c- c0) / cw) ** 2)
 
