@@ -14,7 +14,11 @@ class AlexanderDunkerton1999Dask(AlexanderDunkerton1999):
 
     def get_source_level(self, z, lat=None):
         if lat is None:
-            lat = da.zeros_like(z)
+            return  da.argmin(
+            da.abs(z - self.source_level_height),
+            axis=-1,
+            keepdims=True,
+        )
         return da.argmin(
             da.abs(z - self.source_level_height * da.cos(da.deg2rad(lat))[...,None]),
             axis=-1,

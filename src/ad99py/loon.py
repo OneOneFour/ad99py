@@ -36,6 +36,7 @@ def build_dictionary(untv,uptv,vntv,vptv):
     abs_v = np.abs(ntv_v) + np.abs(ptv_v)
     net_v = ntv_v + ptv_v
     tot = np.sqrt(net_u**2 + net_v**2)
+    abs_f = abs_u + abs_v
     return {
         'u_flux_ntv':ntv_u[ntv_u < 0],
         'u_flux_ptv':ptv_u[ptv_u > 0],
@@ -45,7 +46,8 @@ def build_dictionary(untv,uptv,vntv,vptv):
         'v_flux_abs':abs_v[abs_v > 0],
         'u_flux_net':net_u,
         'v_flux_net':net_v,
-        'total_flux':tot[tot>0]
+        'total_flux':tot[tot>0],
+        'abs_flux':abs_f[abs_f>0]
     }
 
 def loon_data(basins='*',path=None):

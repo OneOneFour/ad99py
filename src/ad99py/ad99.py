@@ -23,7 +23,7 @@ class Level(NamedTuple):
     source: bool = False
 
 
-## Class implementation)
+## Class implementation
 
 
 class AlexanderDunkerton1999:

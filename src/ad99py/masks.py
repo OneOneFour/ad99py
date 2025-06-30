@@ -1,10 +1,17 @@
 from typing import Optional
 import xarray as xr
+import os
 
-DEFAULT_MASK_PATH = 'data/loon_masks.nc'
-def load_mask(path:Optional[str]=None,recentering:bool=True)->xr.Dataset:
+DEFAULT_MASK_NAME = 'loon_masks.nc'
+DEFAULT_MASK_DIR = 'data'
+
+def default_path(dir=DEFAULT_MASK_DIR,name=DEFAULT_MASK_NAME):
+    return os.path.join(dir,name)
+
+
+def load_mask(path:Optional[str]=None,recentering:bool=True,**kwargs)->xr.Dataset:
     if path is None:
-        path = DEFAULT_MASK_PATH
+        path = default_path(**kwargs)
     ds_mask = xr.open_dataset(path)
     if recentering:
         # map longitudes to be in range 0-360
@@ -12,9 +19,9 @@ def load_mask(path:Optional[str]=None,recentering:bool=True)->xr.Dataset:
     return ds_mask
 
 
-def mask_dataset(ds:xr.Dataset,mask:Optional[xr.Dataset]=None):
+def mask_dataset(ds:xr.Dataset,mask:Optional[xr.Dataset]=None,**kwargs):
     if mask is None:
-        mask = load_mask()
+        mask = load_mask(**kwargs)
     if 'latitude' in ds.variables and 'longitude' in ds.variables:
         # we assume either/or for 'latitude'/'longitude' or 'lat'/'lon
         mask = mask.rename(lat='latitude',lon='longitude')
