@@ -1,0 +1,6 @@
+numpy
+scipy
+dask[dask]
+xarray
+windspharm[harmonics]
+pytest
