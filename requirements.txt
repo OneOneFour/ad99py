@@ -1,6 +1,6 @@
 numpy
 scipy
-dask[dask]
 xarray
+dask
 windspharm[harmonics]
 pytest
