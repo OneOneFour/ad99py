@@ -28,10 +28,12 @@ def mask_dataset(ds:xr.Dataset,mask:Optional[xr.Dataset]=None,**kwargs):
         interp_mask = mask.interp(latitude=ds.latitude,longitude=ds.longitude,method='nearest')
         total_mask = sum(interp_mask[d] for d in interp_mask.data_vars)
         masked = ds.where(total_mask).stack(points=['latitude','longitude']).dropna('points',how='all')
-    else:
+    elif 'lat' in ds.variables and 'lon' in ds.variables:
         interp_mask = mask.interp(lat=ds.lat,lon=ds.lon,method='nearest')
         total_mask = sum(interp_mask[d] for d in interp_mask.data_vars)
         masked = ds.where(total_mask).stack(points=['lat','lon']).dropna('points',how='all')
+    else:
+        raise KeyError("Dataset must have 'latitude'/'longitude' or 'lat'/'lon' coordinates.")
     masked = masked.reset_index('points')
     return masked 
    

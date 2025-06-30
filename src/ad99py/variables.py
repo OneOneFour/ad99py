@@ -1,14 +1,14 @@
 import xarray as xr
 import numpy as np
 import dask.array as da
-from .constants import GRAV,R_DRY,C_P
+from .constants import GRAV,R_DRY,C_P,BFLIM
 
 def lapserate(T:np.ndarray|da.Array,z:np.ndarray | da.Array):
     if isinstance(T,da.Array) or isinstance(z,da.Array):
         return da.gradient(T,axis=-1) / da.gradient(z,axis=-1)
     return np.gradient(T,axis=-1) / np.gradient(z,axis=-1)  
     
-def bouyancy_freq_squared(T:np.ndarray,z:np.ndarray,bflim=5e-3):
+def bouyancy_freq_squared(T:np.ndarray,z:np.ndarray,bflim=BFLIM):
     Ns2unfilter = (GRAV/T)*(lapserate(T,z) + GRAV/C_P)
     if isinstance(T,da.Array) or isinstance(z,da.Array):
         return da.where(Ns2unfilter<bflim**2,bflim**2,Ns2unfilter)
