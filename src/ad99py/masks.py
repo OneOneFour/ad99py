@@ -19,18 +19,24 @@ def load_mask(path:Optional[str]=None,recentering:bool=True,**kwargs)->xr.Datase
     return ds_mask
 
 
-def mask_dataset(ds:xr.Dataset,mask:Optional[xr.Dataset]=None,**kwargs):
+def mask_dataset(ds:xr.Dataset,basins=None,mask:Optional[xr.Dataset]=None,**kwargs):
     if mask is None:
         mask = load_mask(**kwargs)
     if 'latitude' in ds.variables and 'longitude' in ds.variables:
         # we assume either/or for 'latitude'/'longitude' or 'lat'/'lon
         mask = mask.rename(lat='latitude',lon='longitude')
         interp_mask = mask.interp(latitude=ds.latitude,longitude=ds.longitude,method='nearest')
-        total_mask = sum(interp_mask[d] for d in interp_mask.data_vars)
+        if basins is None:
+            total_mask = sum(interp_mask[d] for d in interp_mask.data_vars)
+        else:
+            total_mask = sum(interp_mask[d] for d in basins)
         masked = ds.where(total_mask).stack(points=['latitude','longitude']).dropna('points',how='all')
     elif 'lat' in ds.variables and 'lon' in ds.variables:
         interp_mask = mask.interp(lat=ds.lat,lon=ds.lon,method='nearest')
-        total_mask = sum(interp_mask[d] for d in interp_mask.data_vars)
+        if basins is None:
+            total_mask = sum(interp_mask[d] for d in interp_mask.data_vars)
+        else:
+            total_mask = sum(interp_mask[d] for d in basins)
         masked = ds.where(total_mask).stack(points=['lat','lon']).dropna('points',how='all')
     else:
         raise KeyError("Dataset must have 'latitude'/'longitude' or 'lat'/'lon' coordinates.")

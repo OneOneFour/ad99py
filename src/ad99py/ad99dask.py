@@ -60,6 +60,9 @@ class AlexanderDunkerton1999Dask(AlexanderDunkerton1999):
     
         return rho_0, u_0
 
+
+        
+
     def get_vertical_scales(self, z, rho):
         # calculate spacing constants
         dz = z[..., 1:] - z[..., :-1]

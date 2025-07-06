@@ -380,12 +380,13 @@ class AlexanderDunkerton1999:
                 unstable_at_source = source_spectrum[
                     level.breaking_waves | level.reflected_waves
                 ]
-                momentum_flux_neg[: level.level + 1] -= np.sum(
+                momentum_flux_neg[:] -= np.sum(
                     unstable_at_source[unstable_at_source < 0]
                 )
-                momentum_flux_ptv[: level.level + 1] -= np.sum(
+                momentum_flux_ptv[:] -= np.sum(
                     unstable_at_source[unstable_at_source > 0]
                 )
+
             else:
                 reflected = source_spectrum[level.reflected_waves]
                 momentum_flux_neg[: level.level + 1] -= np.sum(reflected[reflected < 0])
