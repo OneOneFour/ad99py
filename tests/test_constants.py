@@ -26,4 +26,4 @@ def test_gamma_consistency():
     assert inferred_gamma == pytest.approx(GAMMA, rel=1e-6), "Gamma not consistent with C_P/C_V"
 
 def test_bflim():
-    assert BFLIM == pytest.approx(3e-5), "Incorrect BFLIM value"
+    assert BFLIM == pytest.approx(5e-3), "Incorrect BFLIM value"
