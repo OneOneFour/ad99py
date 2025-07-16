@@ -6,7 +6,7 @@ from .ad99 import AlexanderDunkerton1999
 class AlexanderDunkerton1999Vectorized(AlexanderDunkerton1999):
     def get_source_level(self, z, lat=None):
         if lat is None:
-            lat = np.zeros_like(z)
+            return np.argmin(np.abs(z - self.source_level_height),axis=-1,keepdims=True)
         return np.argmin(
             np.abs(z - self.source_level_height * np.cos(np.deg2rad(lat))[..., None]),
             axis=-1,

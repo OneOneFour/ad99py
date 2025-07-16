@@ -89,11 +89,14 @@ class AlexanderDunkerton1999:
         )
 
     def get_source_level(self, z: NDArray, lat: Optional[Number] = None) -> int:
-        if lat is None:
-            lat = 0.0  # assume eq
         return int(
-            np.argmin(np.abs(z - self.source_level_height * np.cos(np.deg2rad(lat))))
+            np.argmin(np.abs(z -  self.get_source_height(lat=lat)))
         )
+
+    def get_source_height(self,lat=None):
+        if lat is None:
+            lat = 0.0 # Assume at equator
+        return self.source_level_height*np.cos(np.deg2rad(lat))
 
     def propagate_upwards(
         self,

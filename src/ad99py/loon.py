@@ -46,7 +46,7 @@ def build_dictionary(untv,uptv,vntv,vptv):
         'v_flux_abs':abs_v[abs_v > 0],
         'u_flux_net':net_u,
         'v_flux_net':net_v,
-        'total_flux':tot[tot>0],
+        'net_flux':tot[tot>0],
         'abs_flux':abs_f[abs_f>0]
     }
 

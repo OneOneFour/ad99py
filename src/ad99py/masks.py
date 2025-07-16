@@ -29,14 +29,21 @@ def mask_dataset(ds:xr.Dataset,basins=None,mask:Optional[xr.Dataset]=None,**kwar
         if basins is None:
             total_mask = sum(interp_mask[d] for d in interp_mask.data_vars)
         else:
-            total_mask = sum(interp_mask[d] for d in basins)
+            try:
+                total_mask = sum(interp_mask[d] for d in basins)
+            except KeyError as e:
+                raise KeyError(f"No basin named {e.args[0]}. Allowed basins are {set(interp_mask.data_vars.keys())}") from e
+                
         masked = ds.where(total_mask).stack(points=['latitude','longitude']).dropna('points',how='all')
     elif 'lat' in ds.variables and 'lon' in ds.variables:
         interp_mask = mask.interp(lat=ds.lat,lon=ds.lon,method='nearest')
         if basins is None:
             total_mask = sum(interp_mask[d] for d in interp_mask.data_vars)
         else:
-            total_mask = sum(interp_mask[d] for d in basins)
+            try:
+                total_mask = sum(interp_mask[d] for d in basins)
+            except KeyError as e:
+                raise KeyError(f"No basin named {e.args[0]}. Allowed basins are {set(interp_mask.data_vars.keys())}") from e
         masked = ds.where(total_mask).stack(points=['lat','lon']).dropna('points',how='all')
     else:
         raise KeyError("Dataset must have 'latitude'/'longitude' or 'lat'/'lon' coordinates.")
