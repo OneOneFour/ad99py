@@ -1,22 +1,24 @@
 import os 
 import numpy as np
-from glob import iglob 
+from glob import glob 
 DEFAULT_LOON_GW_DATA_PATH = 'data/loon'
 
-def get_fluxes(basins='*',path=None):
+def get_fluxes(basins=None,path=None):
     u_flux_ptv = []
     u_flux_ntv = []
     v_flux_ntv = []
     v_flux_ptv = []
     if path is None:
         path = DEFAULT_LOON_GW_DATA_PATH
-    if basins != '*':
+    if basins:
         try: 
             paths = [os.path.join(path,f'{b}_flights_flux.npy') for b in basins]
         except TypeError as e:
-            raise TypeError("If argument not * then expected an iterable type of basins.") from e 
+            raise TypeError("If argument not `None` then expected an iterable type of basins.") from e 
     else:
-        paths = iglob(os.path.join(path,'*flux.npy'))
+        paths = glob(os.path.join(path,'*flux.npy'))
+    if len(paths) == 0:
+        raise FileNotFoundError(f"No flux files found in {path}.")
     for f in paths:
         flux = np.load(f)
         u_flux_ntv.append(flux[0])
@@ -50,5 +52,5 @@ def build_dictionary(untv,uptv,vntv,vptv):
         'abs_flux':abs_f[abs_f>0]
     }
 
-def loon_data(basins='*',path=None):
+def loon_data(basins=None,path=None):
     return build_dictionary(*get_fluxes(basins,path))

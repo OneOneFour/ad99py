@@ -6,7 +6,7 @@ import numpy as np
 try:
     from windspharm.xarray import VectorWind # Slower than pyspharm but works well
 except ImportError as e:
-    raise ImportError("Spherical harmonics support not enabled, please install with pip install ad99py[harmonics]")
+    raise ImportError("Spherical harmonics support not enabled, please install with pip install ad99py[harmonics]") from e 
 
 def diag_omega(wind:VectorWind,phalf):
 
