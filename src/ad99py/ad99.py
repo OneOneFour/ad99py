@@ -52,10 +52,8 @@ class AlexanderDunkerton1999:
 
         Grid Parameters:
         pfull - Full pressure levels (hPa) [N]
-        rho - Density on full pressure levels (kg/m^3) [N]
+        rho - Density on full pressure levels (kg/m^3) [N]\
 
-
-        TODO:
         """
         self.dc = dc
         self.cmax = cmax
